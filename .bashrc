@@ -15,3 +15,14 @@ clog() {
                                                 -e "s/^.*\sA\s.*$/\x1b[35m&\x1b[0m/"    # 预定义，可根据需要定制Tag的颜色
 }
 # 使用Tail，既保存日志又输出日志~尤其是Crash闪退的时候
+
+# http://jafrog.com/2013/11/23/colors-in-terminal.html
+printDailyUseColor() {
+    for code in {30..37}; do \
+        echo -en "\e[${code}m"'\\e['"$code"'m'"\e[0m"; \
+        echo -en "  \e[$code;1m"'\\e['"$code"';1m'"\e[0m"; \
+        echo -en "  \e[$code;3m"'\\e['"$code"';3m'"\e[0m"; \
+        echo -en "  \e[$code;4m"'\\e['"$code"';4m'"\e[0m"; \
+        echo -e "  \e[$((code+60))m"'\\e['"$((code+60))"'m'"\e[0m"; \
+    done
+}
