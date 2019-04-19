@@ -7,7 +7,7 @@
 clog() {
     # TODO 为什么 \o33和\x1b可以，\033不行（但在echo命令中又可以）
     # TODO 这种写法为什么失败了 adb logcat | grep $1 | sed -e "s/^.*I.*$/\\${FG_Green} & \\${NC}/"
-    adb logcat | grep --line-buffered $1 | sed  -e "s/^.*\sV\s.*$/\x1b[37m&\x1b[0m/" \
+    adb logcat | grep --line-buffered -E $1 | sed  -e "s/^.*\sV\s.*$/\x1b[37m&\x1b[0m/" \
                                                 -e "s/^.*\sD\s.*$/\x1b[34m&\x1b[0m/" \
                                                 -e "s/^.*\sI\s.*$/\x1b[32m&\x1b[0m/" \
                                                 -e "s/^.*\sW\s.*$/\x1b[33m&\x1b[0m/" \
