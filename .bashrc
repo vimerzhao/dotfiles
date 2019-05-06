@@ -51,6 +51,7 @@ releaseRapid() {
     cd ..
 }
 
+# 清理发布目录
 clearReleaseFolder() {
     out=${PWD##*/}"_release"
     if [ -d $out ]; then
@@ -58,3 +59,15 @@ clearReleaseFolder() {
     fi
 }
 
+# 替换文本和图片，方便没有后台数据时测试使用
+trick() {
+    sed -i "s/text=\"data@[^\"]*/&DEBUG$换行超长字符串测试-换行超长字符串测试#换行超长字符串测试DEBUG/g" *.xml
+    sed -i "s/00ff0001/ff0001/g" *.xml
+}
+detrick() {
+    sed -i "s/DEBUG.*DEBUG//g" *.xml
+    sed -i "s/ff0001/00ff0001/g" *.xml
+}
+
+# 一些adb命令的简写
+alias current_activity="adb shell dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp'"
