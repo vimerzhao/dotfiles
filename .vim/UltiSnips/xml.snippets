@@ -1,0 +1,68 @@
+priority 50
+
+# Tag
+snippet tximageview "Rapid->TxImageView" b
+<tximageview url="${1}"
+    width="${2:wrap_content}" height="${3:wrap_content}" scaletype="${4:center_crop}"/>
+endsnippet
+
+snippet task "task" b
+<task ${1}>
+    ${2}
+</task>
+endsnippet
+
+# action
+snippet new-report "reportactionv2" b
+<reportactionv2 param="actionid:${1},subposition:${2}" suffix="${3}"/>
+endsnippet
+
+snippet lua "luaaction" b
+<luaaction load="${1}" function="${2}"/>
+endsnippet
+
+snippet tmast "tmastaction" b
+<tmastaction tmast="data@${1}" extra="${2}"/>
+endsnippet
+
+snippet task2 "taskaction" b
+<taskaction call="${1}"/>
+endsnippet
+
+snippet datafilter "datafileter" b
+<datafilter reference="${1:un}equal" key="${2}" value="${3}"/>
+endsnippet
+
+snippet attribute "attributeaction" b
+<attributeaction id="${1}" key="${2}" value="${3}"/>
+endsnippet
+
+
+# ViewGrup
+snippet relativelayout "relativelayout" b
+<relativelayout width="${1:match_parent}" height="${2:match_parent}">
+
+</relativelayout>
+endsnippet
+# view
+snippet download "detaildownloadbutton" b
+<detaildownloadbutton appsimpledetail="data@app_model${1}"
+    width="${2:52}" height="${3:24}"
+    scene="data@scene" slotid="data@slotid" subposition="${4}"
+    recommendid="data@recommendid${5:_[i]}" modeltype="data@modeltype" contentid="data@contentid"
+    sourcescene="data@sourcescene$-1" sourcemodeltype="data@sourcemodeltype$-1" sourcesceneslotid="data@sourcesceneslotid"/>
+endsnippet
+
+snippet textview "textview" b
+<textview text="${1}"
+    width="wrap_content" height="wrap_content" textsize="${2:12}"
+    singleline="true" ellipsize="end"/>
+endsnippet
+
+
+# help
+snippet comment "Singleline Comment" b
+<!--${1}-->
+endsnippet
+
+

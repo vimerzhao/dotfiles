@@ -1,0 +1,9 @@
+
+snippet listner "Native回调" b
+${1:IExampleListener }= {}
+function $1.${2:doSomething}()
+    ${3:body}
+end
+local ${4:exampleListener }= luajava.createProxy('${5:com.example.package.}', $1)
+endsnippet
+
