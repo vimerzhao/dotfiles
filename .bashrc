@@ -28,26 +28,62 @@ printDailyUseColor() {
 
 # 光子发布脚本releaseRapid
 releaseRapid() {
+    if !(command -v 7z >/dev/null 2>&1); then
+        echo "7z 不存在"
+        return
+    fi
+    if !(command -v luac >/dev/null 2>&1); then
+        echo "luac 不存在"
+        return
+    fi
+
     # TODO 配置luac和zip的环境变量
     out=${PWD##*/}"_release"
 
-    if [ ! -d $out ]; then
-        mkdir $out
+    # 创建工作空间
+    if [ -d $out ]; then
+        rm -rf $out
+        echo -e 删除已经存在的目录'\t\t'$out
     fi
+    mkdir $out
 
-    for f in ./*.xml; do
-        echo processing $f
-        cat $f | sed '/<!--.*-->/d' | sed '/^$/d' | sed 's/\.lua/\.out/g' > $out/$f
+
+    for f in ./*; do
+        if test -f $f; then
+            if [ "${f##*.}" == "lua" ]; then 
+                # 编译Lua文件
+                echo -e 编译lua脚本'\t\t\t'$f
+                f1=${f%.lua*}".out"
+                luac -o $out/$f1 $f
+            elif [ "${f##*.}" == "xml" ]; then
+                # 删除xml文件的注释，注意不要使用跨行注释
+                # 删除空行
+                # 替换lua为out，不要再xml随意使用lua这个词，当做保留字
+                echo -e 删除空行注释，替换后缀'\t\t'$f
+                cat $f | sed '/<!--.*-->/d' | sed '/^$/d' | sed 's/\.lua/\.out/g' > $out/$f
+            else
+                # 其他文件平移，所以要保持目录干净
+                echo -e 平移其他文件'\t\t\t'$f
+                cp $f ./$out/
+            fi
+        elif test -d $f; then
+            # 字符串处理
+            if [ "$f" == "./$out" ]; then
+                # 该目录不移动
+                echo -e 跳过目标目录'\t\t\t'$f
+            elif [ "$f" == "./doc" ]; then
+                # 该目录不移动,这个目录用来存放设计图等文档
+                echo -e 跳过文档存放目录'\t\t\t'$f
+            else
+                echo -e 平移其他目录'\t\t\t'$f
+                cp -rf ./$f ./$out/
+            fi
+        fi
     done
 
-    for f in ./*.lua; do
-        echo compiling $f
-        f1=${f%.lua*}".out"
-        luac -o $out/$f1 $f
-    done
     cd $out
+    echo "=========================开始打包RuntimeView========================="
     7z a $out".zip"
-
     cd ..
 }
 
