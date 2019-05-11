@@ -39,11 +39,17 @@ endsnippet
 
 
 # ViewGrup
-snippet relativelayout "relativelayout" b
-<relativelayout width="${1:match_parent}" height="${2:match_parent}">
-
-</relativelayout>
+snippet layout "Rapid Layout" b
+<${1:relativelayout} width="${2:match_parent}" height="${3:match_parent}">
+${0}
+</$1>
 endsnippet
+
+# property
+snippet bgc "backgroundcolor" w
+backgroundcolor="${1:ffffff}"
+endsnippet
+
 # view
 snippet download "detaildownloadbutton" b
 <detaildownloadbutton appsimpledetail="data@app_model${1}"
