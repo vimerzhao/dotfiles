@@ -3,19 +3,9 @@
 #   https://developer.android.com/studio/debug/am-logcat
 #   https://en.wikipedia.org/wiki/ANSI_escape_code
 
-# 输出日志
-clog() {
-    # TODO 为什么 \o33和\x1b可以，\033不行（但在echo命令中又可以）
-    grep --line-buffered -E $1 | sed  -e "s/^.*\sV\s.*$/\x1b[37m&\x1b[0m/" \
-                                                -e "s/^.*\sD\s.*$/\x1b[34m&\x1b[0m/" \
-                                                -e "s/^.*\sI\s.*$/\x1b[32m&\x1b[0m/" \
-                                                -e "s/^.*\sW\s.*$/\x1b[33m&\x1b[0m/" \
-                                                -e "s/^.*\sE\s.*$/\x1b[31m&\x1b[0m/" \
-                                                -e "s/^.*\sA\s.*$/\x1b[35m&\x1b[0m/"    # 预定义，可根据需要定制Tag的颜色
-}
-# 使用Tail，既保存日志又输出日志~尤其是Crash闪退的时候
-
 # http://jafrog.com/2013/11/23/colors-in-terminal.html
+
+# START 通用
 printDailyUseColor() {
     for code in {30..37}; do \
         echo -en "\e[${code}m"'\\e['"$code"'m'"\e[0m"; \
@@ -25,9 +15,11 @@ printDailyUseColor() {
         echo -e "  \e[$((code+60))m"'\\e['"$((code+60))"'m'"\e[0m"; \
     done
 }
+# END
 
-# 光子发布脚本releaseRapid
-releaseRapid() {
+
+# START 光子开发相关
+releaseRapid() { # 光子发布脚本releaseRapid
     if !(command -v 7z >/dev/null 2>&1); then
         echo "7z 不存在"
         return
@@ -97,13 +89,92 @@ clearReleaseFolder() {
 
 # 替换文本和图片，方便没有后台数据时测试使用
 trick() {
-    sed -i "s/text=\"data@[^\"]*/&DEBUG$换行超长字符串测试-换行超长字符串测试#换行超长字符串测试DEBUG/g" *.xml
-    sed -i "s/00ff0001/ff0001/g" *.xml
+    if (( "$#" <= "0" )); then
+        echo process all
+        sed -i "s/text=\"data@[^\"]*/&DEBUG$换行超长字符串测试-换行超长字符串测试#换行超长字符串测试DEBUG/g" *.xml
+        sed -i "s/00ff0101/ff0101/g" *.xml
+    else
+        for f in $*; do
+            echo process $f
+            sed -i "s/text=\"data@[^\"]*/&DEBUG$换行超长字符串测试-换行超长字符串测试#换行超长字符串测试DEBUG/g" $f
+            sed -i "s/00ff0101/ff0101/g" $f
+        done
+    fi
 }
 detrick() {
-    sed -i "s/DEBUG.*DEBUG//g" *.xml
-    sed -i "s/ff0001/00ff0001/g" *.xml
+    if (( "$#" <= "0" )); then
+        echo process all
+        sed -i "s/DEBUG.*DEBUG//g" *.xml
+        sed -i "s/ff0101/00ff0101/g" *.xml
+    else
+        for f in $*; do
+            echo process $f
+            sed -i "s/DEBUG.*DEBUG//g" $f
+            sed -i "s/ff0101/00ff0101/g" $f
+        done
+    fi
 }
 
-# 一些adb命令的简写
-alias current_activity="adb shell dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp'"
+# START Android通用
+alias current_activity="adb shell dumpsys window windows | grep -E 'mCurrentFocus|mFocusedApp'" # 一些adb命令的简写
+alias pullHuaweiScreenshots="adb pull  sdcard/Pictures/Screenshots/" # 获取华为测试机的全部截图
+
+alias deeplink="adb shell am start -a android.intent.action.VIEW -d"
+alias ass="adb shell screenrecord //mnt/sdcard/demo.mp4"
+alias aps="adb pull //mnt/sdcard/demo.mp4"
+
+clog() { # 输出日志
+    # TODO 为什么 \o33和\x1b可以，\033不行（但在echo命令中又可以）
+    grep --line-buffered -E $1 | sed  -e "s/^.*\sV\s.*$/\x1b[37m&\x1b[0m/" \
+                                                -e "s/^.*\sD\s.*$/\x1b[35m&\x1b[0m/" \
+                                                -e "s/^.*\sI\s.*$/\x1b[32m&\x1b[0m/" \
+                                                -e "s/^.*\sW\s.*$/\x1b[33m&\x1b[0m/" \
+                                                -e "s/^.*\sE\s.*$/\x1b[31m&\x1b[0m/" \
+                                                -e "s/^.*\sA\s.*$/\x1b[35m&\x1b[0m/"    # 预定义，可根据需要定制Tag的颜色
+} # 使用Tail，既保存日志又输出日志~尤其是Crash闪退的时候
+# END
+
+# START FFmpeg常用
+export ffmpeg="/d/ffmpeg/bin/ffmpeg.exe"
+alias v2f="$ffmpeg -i demo.mp4 %d.jpg" # video to frame 视频分帧，用于调试一些动画问题
+# END
+
+
+
+# START 应用宝相关
+killYYB() {
+    adb shell am force-stop com.tencent.android.qqdownloader 
+}
+rmLaunchLog() { # 做下载速度的时候添加的
+    adb shell rm '//mnt/sdcard/tencent/tassistant/log/LaunchSpeedFLog'
+}
+
+getLaunchLog() {
+    versionName=`adb shell dumpsys package com.tencent.android.qqdownloader | grep versionName`
+    adb pull '//mnt/sdcard/tencent/tassistant/log/LaunchSpeedFLog' LaunchSpeedFLog${versionName:16}
+}
+
+
+launchYYB() {
+    adb shell am start -n com.tencent.android.qqdownloader/com.tencent.pangu.link.SplashActivity
+}
+
+# END
+
+# START Git相关 
+# 缩写注意保持和 https://github.com/robbyrussell/oh-my-zsh/wiki/Cheatsheet#git 的风格保持一致
+alias ga="git add ."
+alias gc="git commit"
+alias gcm="git commit -m"
+alias gcb="git checkout -b"
+alias gp="git pull"
+alias gpr="git pull --rebase"
+alias gs="git status"
+alias gpu="git push"
+
+gitLog() { # 高度格式化的日志阅读格式
+    git log --graph --abbrev-commit --decorate  --first-parent $*
+}
+# END
+echo finish
+

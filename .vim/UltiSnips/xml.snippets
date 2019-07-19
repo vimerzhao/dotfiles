@@ -12,9 +12,36 @@ snippet task "task" b
 </task>
 endsnippet
 
+
+# hook
+snippet datachange "datachange" A
+hook="datachange" value="${1}"
+endsnippet
+
+snippet view_show "view_show" A
+hook="view_show"
+endsnippet
+
+snippet load_finish "load_finish" A
+hook="load_finish"
+endsnippet
+
+snippet before_update_data "before_update_data" A
+hook="before_update_data"
+endsnippet
+
+snippet after_update_data "after_update_data" A
+hook="after_update_data"
+endsnippet
+
 # action
 snippet new-report "reportactionv2" b
 <reportactionv2 param="actionid:${1},subposition:${2}" suffix="${3}"/>
+endsnippet
+
+snippet old-report "reportaction" b
+<reportaction recommendid="data@R1"
+    param="slotid:data@slotId$${2},status:${3:-1},subposition:${4},actionid:${5:1}00"/>
 endsnippet
 
 snippet lua "luaaction" b
@@ -29,6 +56,10 @@ snippet task2 "taskaction" b
 <taskaction call="${1}"/>
 endsnippet
 
+snippet toastaction "toastaction" b
+<toastaction value="${1:toast}"/>
+endsnippet
+
 snippet datafilter "datafileter" b
 <datafilter reference="${1:un}equal" key="${2}" value="${3}"/>
 endsnippet
@@ -36,6 +67,12 @@ endsnippet
 snippet attribute "attributeaction" b
 <attributeaction id="${1}" key="${2}" value="${3}"/>
 endsnippet
+snippet outeraction "outeraction" b
+<task id="${1:click}">
+    <outeraction key="${2:key}" value="${3:data@value}"/>
+</task>
+endsnippet
+
 
 
 # ViewGrup
@@ -45,7 +82,60 @@ ${0}
 </$1>
 endsnippet
 
-# property
+# RelativeLayoutParams
+snippet alignleft "alignleft" A
+alignleft="${1:true}"
+endsnippet
+snippet aligntop "aligntop" A
+aligntop="${1:true}"
+endsnippet
+snippet alignright "alignright" A
+alignright="${1:true}"
+endsnippet
+snippet alignbottom "alignbottom" A
+alignbottom="${1:true}"
+endsnippet
+snippet leftof "leftof" A
+leftof="${1:true}"
+endsnippet
+snippet above "above" A
+above="${1:true}"
+endsnippet
+snippet rightof "rightof" A
+rightof="${1:true}"
+endsnippet
+snippet below "below" A
+below="${1:true}"
+endsnippet
+snippet centervertical "centervertical" A
+centervertical="${1:true}"
+endsnippet
+snippet centerhorizontal "centerhorizontal" A
+centerhorizontal="${1:true}"
+endsnippet
+snippet centerinparent "centerinparent" A
+centerinparent="${1:true}"
+endsnippet
+snippet alignparenttop "alignparenttop" A
+alignparenttop="${1:true}"
+endsnippet
+snippet alignparentright "alignparentright" A
+alignparentright="${1:true}"
+endsnippet
+snippet alignparentleft "alignparentleft" A
+alignparentleft="${1:true}"
+endsnippet
+snippet alignparentbottom "alignparentbottom" A
+alignparentbottom="${1:true}"
+endsnippet
+# LinearLayoutParser
+snippet orientation "orientation" A
+orientation="${1:horizontal}${2:vertical}"
+endsnippet
+
+
+
+# property--->根据光子代码提取
 snippet bgc "backgroundcolor" w
 backgroundcolor="${1:ffffff}"
 endsnippet
@@ -58,17 +148,34 @@ snippet download "detaildownloadbutton" b
     recommendid="data@recommendid${5:_[i]}" modeltype="data@modeltype" contentid="data@contentid"
     sourcescene="data@sourcescene$-1" sourcemodeltype="data@sourcemodeltype$-1" sourcesceneslotid="data@sourcesceneslotid"/>
 endsnippet
+# configure text
+snippet configure "下载按钮文字定制" A
+textmap="download:${1},downloading:${2},paused:$2,downloaded:${3},installed:${4}"
+endsnippet
 
 snippet textview "textview" b
 <textview text="${1}"
-    width="wrap_content" height="wrap_content" textsize="${2:12}"
+    width="wrap_content" height="wrap_content" textsize="${2:12}" textcolor="${3:000000}"
     singleline="true" ellipsize="end"/>
 endsnippet
 
+# Github调试图片
+snippet appUrl "appUrl" A
+https://github.com/vimerzhao/images/raw/master/dev/weishi.png
+endsnippet
+snippet palceholder "placeholder" A
+https://github.com/vimerzhao/images/raw/master/dev/placeholder.jpg
+endsnippet
+
+# lua script
+snippet log "photon.getJavaBridge():Log" b
+photon.getJavaBridge():Log('vimerzhao ${1}', '${2:are you ok?}')
+endsnippet
 
 # help
 snippet comment "Singleline Comment" b
 <!--${1}-->
 endsnippet
+
 
 

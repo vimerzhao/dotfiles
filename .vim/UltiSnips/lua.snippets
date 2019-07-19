@@ -7,3 +7,24 @@ end
 local ${4:exampleListener }= luajava.createProxy('${5:com.example.package.}', $1)
 endsnippet
 
+snippet debug "debug template" b
+if mDebug then
+    ${1:mJavaBridge}:Log("${2:Filename()}", "${3:log detail}")
+end
+endsnippet
+
+snippet new-debug "Debug Code Wrapped By Comment" b
+---[[
+${1}
+--]]
+endsnippet
+
+snippet log "mJavaBridge:Log(..., ...)" b
+mJavaBridge:Log(TAG, ${1})
+endsnippet
+
+snippet comment "评论注释" b
+-- CREATED BY VIMERZHAO in ${1:date}
+-- ${2}
+endsnippet
+
