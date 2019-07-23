@@ -182,7 +182,9 @@ branchLife() { # 查看分支最后提交人和存活周期
     git for-each-ref --sort='-committerdate' --format="%(refname:short) %09 %(authorname) %09 %(committerdate:relative)"  \
         | grep  --line-buffered "origin" \
         | awk '{printf "%-50s%-25s%s %s %s\n",$1,$2,$3,$4,$5}' \
-        |sed  -e "s/^.*\sweeks\s.*$/\x1b[35m&\x1b[0m/"  -e "s/^.*\smonths\s.*$/\x1b[31m&\x1b[0m/"
+        | sed  -e "s/^.* weeks .*$/${esc}[35m&${esc}[0m/"  -e "s/^.* months .*$/${esc}[31m&${esc}[0m/"
+    # windows bash，如何兼容
+    # | sed  -e "s/^.*\sweeks\s.*$/\x1b[35m&\x1b[0m/"  -e "s/^.*\smonths\s.*$/\x1b[31m&\x1b[0m/" \
 }
 
 gitLog() { # 高度格式化的日志阅读格式
@@ -191,3 +193,8 @@ gitLog() { # 高度格式化的日志阅读格式
 # END
 echo finish
 
+setUpMac() {
+    export PATH=$PATH:/Users/vimerzhao/Library/Android/sdk/platform-tools
+}
+
+setUpMac
