@@ -20,11 +20,11 @@ printDailyUseColor() {
 
 # START 光子开发相关
 releaseRapid() { # 光子发布脚本releaseRapid
-    if !(command -v 7z >/dev/null 2>&1); then
+    if ! (command -v 7z >/dev/null 2>&1); then
         echo "7z 不存在"
         return
     fi
-    if !(command -v luac >/dev/null 2>&1); then
+    if ! (command -v luac >/dev/null 2>&1); then
         echo "luac 不存在"
         return
     fi
