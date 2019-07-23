@@ -172,6 +172,19 @@ alias gpr="git pull --rebase"
 alias gs="git status"
 alias gpu="git push"
 
+# 时间格式定制 https://stackoverflow.com/questions/7853332/how-to-change-git-log-date-formats
+# 同步分支 https://stackoverflow.com/questions/6373277/synchronizing-a-local-git-repository-with-a-remote-one
+# for-each-ref命令 https://git-scm.com/docs/git-for-each-ref
+# https://stackoverflow.com/questions/21256861/what-are-valid-fields-for-the-format-option-of-git-for-each-ref
+# https://git-scm.com/book/en/v2/Git-Internals-Git-References
+branchLife() { # 查看分支最后提交人和存活周期
+    git fetch --prune
+    git for-each-ref --sort='-committerdate' --format="%(refname:short) %09 %(authorname) %09 %(committerdate:relative)"  \
+        | grep  --line-buffered "origin" \
+        | awk '{printf "%-50s%-25s%s %s %s\n",$1,$2,$3,$4,$5}' \
+        |sed  -e "s/^.*\sweeks\s.*$/\x1b[35m&\x1b[0m/"  -e "s/^.*\smonths\s.*$/\x1b[31m&\x1b[0m/"
+}
+
 gitLog() { # 高度格式化的日志阅读格式
     git log --graph --abbrev-commit --decorate  --first-parent $*
 }
