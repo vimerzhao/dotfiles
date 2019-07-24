@@ -183,7 +183,7 @@ branchLife() { # 查看分支最后提交人和存活周期
         | grep  --line-buffered "origin" \
         | awk '{printf "%-50s%-25s%s %s %s\n",$1,$2,$3,$4,$5}' \
         | sed  -e "s/^.* weeks .*$/${esc}[35m&${esc}[0m/"  -e "s/^.* months .*$/${esc}[31m&${esc}[0m/"
-    # windows bash，如何兼容
+    # mac zsh上不行，为什么~~  需要查明 ${esc}  \x1b \011 的区别
     # | sed  -e "s/^.*\sweeks\s.*$/\x1b[35m&\x1b[0m/"  -e "s/^.*\smonths\s.*$/\x1b[31m&\x1b[0m/" \
 }
 
