@@ -167,10 +167,11 @@ alias ga="git add ."
 alias gc="git commit"
 alias gcm="git commit -m"
 alias gcb="git checkout -b"
+# https://stackoverflow.com/questions/1146973/how-do-i-revert-all-local-changes-in-git-managed-project-to-previous-state
+alias gcd="git checkout ."
 alias gp="git pull"
 alias gpr="git pull --rebase"
 alias gs="git status"
-alias gpu="git push"
 
 # 时间格式定制 https://stackoverflow.com/questions/7853332/how-to-change-git-log-date-formats
 # 同步分支 https://stackoverflow.com/questions/6373277/synchronizing-a-local-git-repository-with-a-remote-one
