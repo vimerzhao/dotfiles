@@ -1,0 +1,104 @@
+" GUI Settings {
+
+    " GVIM- (here instead of .gvimrc)
+    if has('gui_running')
+        colorscheme monokain
+
+        if !exists("g:spf13_no_big_font")
+            if LINUX() && has("gui_running")
+                set guifont=Monaco\ 14,Menlo\ Regular\ 11,Consolas\ Regular\ 12,Courier\ New\ Regular\ 14
+            elseif OSX() && has("gui_running")
+                set guifont=Andale\ Mono\ Regular:h12,Menlo\ Regular:h11,Consolas\ Regular:h12,Courier\ New\ Regular:h14
+            elseif WINDOWS() && has("gui_running")
+                " 高亮显示当前行/列
+                set cursorline
+                set cursorcolumn
+                set guifont=Consolas:h17,Monaco:h14,Andale_Mono:h14,Menlo:h14,Courier_New:h14
+                set nospell
+                " full screen
+                autocmd GUIEnter * simalt ~x
+            endif
+        endif
+    endif
+" }
+
+" tmux
+if exists('$TMUX')
+    set term=screen-256color
+endif
+" 处理TMUX或一些终端的鼠标形状问题
+if exists('$TMUX')
+    let &t_SI = "\<Esc>Ptmux;\<Esc>\e[5 q\<Esc>\\"
+    let &t_EI = "\<Esc>Ptmux;\<Esc>\e[2 q\<Esc>\\"
+else
+    let &t_SI = "\e[5 q"
+    let &t_EI = "\e[2 q"
+endif
+
+" my plugin
+Plugin 'JamshedVesuna/vim-markdown-preview'
+Plugin 'vim-scripts/TaskList.vim'
+Plugin 'severin-lemaignan/vim-minimap'
+
+
+" only for windows,not sync in github
+" Tell Neosnippet about the other snippets
+let g:neosnippet#snippets_directory='~/.vim/bundle/oh-my-snippets/neo-snippets'
+" push当前文件到光子debug目录
+command! ADBpush !adb push % /sdcard/tencent/tassistant/photondebug/%
+command! ADBSpush silent !adb push % /sdcard/tencent/tassistant/photondebug/%
+autocmd BufWritePost *.xml :ADBSpush
+autocmd BufWritePost *.lua :ADBSpush
+
+" 杀死应用宝进程
+command! ADBSkill silent !adb shell am force-stop com.tencent.android.qqdownloader
+command! ADBkill !adb shell am force-stop com.tencent.android.qqdownloader
+command! ADBSclear silent !adb shell pm clear com.tencent.android.qqdownloader
+command! ADBclear !adb shell pm clear com.tencent.android.qqdownloader
+command! ADBSuninstall silent !adb uninstall com.tencent.android.qqdownloader
+command! ADBuninstall !adb uninstall com.tencent.android.qqdownloader
+
+" 有时间封装成函数，做类型判断
+command! MarkdownPreview silent !pandoc % > temp.html && C:\Users\vimerzhao\AppData\Local\Google\Chrome\Application\chrome.exe temp.html
+
+command! Plantuml !java -jar D:\TCtools\plantuml\plantuml.jar -charset UTF-8  %
+command! SPlantuml silent !java -jar D:\TCtools\plantuml\plantuml.jar -charset UTF-8 % && %:r.png
+command! SPlantumlTSVG silent !java -jar D:\TCtools\plantuml\plantuml.jar -charset UTF-8 -tsvg % && %:r.svg
+
+" graphviz使用
+map <f8> :w<CR>: !dot -Tpng -o %<.png % && start %<.png<CR>
+command! DotPng silent !dot -Tpng -o %<.png % && start %<.png
+command! DotSvg silent !dot -Tsvg -o %<.svg % && start %<.svg
+command! DotToSvg !dot -Tsvg -o %<.svg % && start %<.svg
+
+" 光子自动补全
+autocmd BufNewFile,BufRead *.xml set filetype=xml
+autocmd FileType xml set dictionary=~/.vim/dict/xml.dict
+autocmd BufNewFile,BufRead *.lua set filetype=lua
+autocmd FileType xml set dictionary=~/.vim/dict/lua.dict
+
+" minimap快捷键
+let g:minimap_show='<leader>ms'
+let g:minimap_update='<leader>mu'
+let g:minimap_close='<leader>gc'
+let g:minimap_toggle='<leader>gt'
+
+" source ~/my-config/.vim/.vimrc.custom
+"
+" Track the engine.
+Plugin 'SirVer/ultisnips'
+
+" Snippets are separated from the engine. Add this if you want them:
+" Plugin 'honza/vim-snippets'
+" 已有
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+let g:UltiSnipsExpandTrigger="<c-l>"
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsJumpForwardTrigger = "<tab>"
+let g:UltiSnipsJumpBackwardTrigger = "<c-s-k>"
+" 这个插件的UltiSnips目录不生效，这里手动触发一下
+set rtp+=~/.vim/bundle/vim-snippets
+set rtp+=~/my-config/.vim
+autocmd BufWritePost *.adoc :silent !asciidoctor %

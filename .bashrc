@@ -6,6 +6,9 @@
 # http://jafrog.com/2013/11/23/colors-in-terminal.html
 
 # START 通用
+# https://stackoverflow.com/questions/5947742/how-to-change-the-output-color-of-echo-in-linux
+# https://en.wikipedia.org/wiki/ANSI_escape_code
+
 printDailyUseColor() {
     for code in {30..37}; do \
         echo -en "\e[${code}m"'\\e['"$code"'m'"\e[0m"; \
@@ -183,9 +186,9 @@ branchLife() { # 查看分支最后提交人和存活周期
     git for-each-ref --sort='-committerdate' --format="%(refname:short) %09 %(authorname) %09 %(committerdate:relative)"  \
         | grep  --line-buffered "origin" \
         | awk '{printf "%-50s%-25s%s %s %s\n",$1,$2,$3,$4,$5}' \
-        | sed  -e "s/^.* weeks .*$/${esc}[35m&${esc}[0m/"  -e "s/^.* months .*$/${esc}[31m&${esc}[0m/"
+        | sed  -e "s/^.*\sweeks\s.*$/\x1b[35m&\x1b[0m/"  -e "s/^.*\smonths\s.*$/\x1b[31m&\x1b[0m/"
+    #    | sed  -e "s/^.* weeks .*$/${esc}[35m&${esc}[0m/"  -e "s/^.* months .*$/${esc}[31m&${esc}[0m/"
     # mac zsh上不行，为什么~~  需要查明 ${esc}  \x1b \011 的区别
-    # | sed  -e "s/^.*\sweeks\s.*$/\x1b[35m&\x1b[0m/"  -e "s/^.*\smonths\s.*$/\x1b[31m&\x1b[0m/" \
 }
 
 gitLog() { # 高度格式化的日志阅读格式
