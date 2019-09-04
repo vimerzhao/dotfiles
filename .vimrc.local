@@ -1,3 +1,17 @@
+" 判定平台，Window/Mac/Linux能做的事情，需要做的事情不一样
+" https://superuser.com/questions/194715/how-to-make-vim-settings-computer-dependent-in-vimrc
+let s:os='unknown'
+let s:os_win = 'windows'
+let s:os_mac= 'mac'
+let s:os_linux= 'linux'
+if has('win32')
+    let s:os = s:os_win
+elseif has('mac')
+    let s:os = s:os_mac
+elseif has('unix')
+endif
+
+" 通用配置
 " GUI Settings {
 
     " GVIM- (here instead of .gvimrc)
@@ -26,6 +40,7 @@
 if exists('$TMUX')
     set term=screen-256color
 endif
+
 " 处理TMUX或一些终端的鼠标形状问题
 if exists('$TMUX')
     let &t_SI = "\<Esc>Ptmux;\<Esc>\e[5 q\<Esc>\\"
@@ -65,11 +80,17 @@ command! Plantuml !java -jar D:\TCtools\plantuml\plantuml.jar -charset UTF-8  %
 command! SPlantuml silent !java -jar D:\TCtools\plantuml\plantuml.jar -charset UTF-8 % && %:r.png
 command! SPlantumlTSVG silent !java -jar D:\TCtools\plantuml\plantuml.jar -charset UTF-8 -tsvg % && %:r.svg
 
-" graphviz使用
-map <f8> :w<CR>: !dot -Tpng -o %<.png % && start %<.png<CR>
-command! DotPng silent !dot -Tpng -o %<.png % && start %<.png
-command! DotSvg silent !dot -Tsvg -o %<.svg % && start %<.svg
-command! DotToSvg !dot -Tsvg -o %<.svg % && start %<.svg
+if s:os == s:os_win
+    map <f8> :w<CR>: !dot -Tpng -o %<.png % && start %<.png<CR>
+    command! DotPng silent !dot -Tpng -o %<.png % && start %<.png
+    command! DotSvg silent !dot -Tsvg -o %<.svg % && start %<.svg
+    command! DotToSvg !dot -Tsvg -o %<.svg % && start %<.svg
+elseif s:os == s:os_mac
+    " mac 用slient会导致vim编辑器内容被清除，需要滚动才能出来
+    command! DotPng silent !dot -Tpng -o %<.png %
+    command! DotSvg !dot -Tsvg -o %<.svg % && open -a "Google Chrome" %<.svg
+    command! DotSvgOnly silent !dot -Tsvg -o %<.svg %
+endif
 
 " 光子自动补全
 autocmd BufNewFile,BufRead *.xml set filetype=xml
@@ -82,15 +103,8 @@ let g:minimap_show='<leader>ms'
 let g:minimap_update='<leader>mu'
 let g:minimap_close='<leader>gc'
 let g:minimap_toggle='<leader>gt'
-
-" source ~/my-config/.vim/.vimrc.custom
-"
 " Track the engine.
 Plugin 'SirVer/ultisnips'
-
-" Snippets are separated from the engine. Add this if you want them:
-" Plugin 'honza/vim-snippets'
-" 已有
 
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
@@ -101,4 +115,9 @@ let g:UltiSnipsJumpBackwardTrigger = "<c-s-k>"
 " 这个插件的UltiSnips目录不生效，这里手动触发一下
 set rtp+=~/.vim/bundle/vim-snippets
 set rtp+=~/my-config/.vim
+" asciidoc
 autocmd BufWritePost *.adoc :silent !asciidoctor %
+if s:os == s:os_win
+elseif s:os == s:os_mac
+    command! AsciidocPreview !asciidoctor % && open -a "Google Chrome" %<.html
+endif
