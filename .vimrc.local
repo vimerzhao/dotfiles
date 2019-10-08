@@ -60,10 +60,10 @@ Plugin 'severin-lemaignan/vim-minimap'
 " Tell Neosnippet about the other snippets
 let g:neosnippet#snippets_directory='~/.vim/bundle/oh-my-snippets/neo-snippets'
 " push当前文件到光子debug目录
-command! ADBpush !adb push % /sdcard/tencent/tassistant/photondebug/%
-command! ADBSpush silent !adb push % /sdcard/tencent/tassistant/photondebug/%
-autocmd BufWritePost *.xml :ADBSpush
-autocmd BufWritePost *.lua :ADBSpush
+command! ADBpush !adb push % /sdcard/rapidview/rapid_demo/rapiddebug/%
+command! ADBSpush silent !adb push % /sdcard/tencent/tassistant/rapiddebug/%
+autocmd BufWritePost *.xml :ADBpush
+autocmd BufWritePost *.lua :ADBpush
 
 " 杀死应用宝进程
 command! ADBSkill silent !adb shell am force-stop com.tencent.android.qqdownloader
@@ -114,9 +114,9 @@ let g:UltiSnipsJumpForwardTrigger = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<c-s-k>"
 " 这个插件的UltiSnips目录不生效，这里手动触发一下
 set rtp+=~/.vim/bundle/vim-snippets
-set rtp+=~/my-config/.vim
+set rtp+=~/.my-config/.vim
 " asciidoc
-autocmd BufWritePost *.adoc :silent !asciidoctor %
+" autocmd BufWritePost *.adoc :silent !asciidoctor %
 if s:os == s:os_win
 elseif s:os == s:os_mac
     command! AsciidocPreview !asciidoctor % && open -a "Google Chrome" %<.html
