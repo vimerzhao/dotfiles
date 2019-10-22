@@ -107,7 +107,7 @@ releaseRapid() { # 光子发布脚本releaseRapid
     fi
 
     # TODO 配置luac和zip的环境变量
-    out=${PWD##*/}"_release"
+    out = ${PWD##*/}"_release"
 
     # 创建工作空间
     if [ -d $out ]; then
@@ -122,7 +122,7 @@ releaseRapid() { # 光子发布脚本releaseRapid
             if [ "${f##*.}" == "lua" ]; then 
                 # 编译Lua文件
                 echo -e 编译lua脚本'\t\t\t'$f
-                f1=${f%.lua*}".out"
+                f1 = ${f%.lua*}".out"
                 luac -o $out/$f1 $f
             elif [ "${f##*.}" == "xml" ]; then
                 # 删除xml文件的注释，注意不要使用跨行注释
@@ -251,6 +251,9 @@ alias gcd="git checkout ."
 alias gp="git pull"
 alias gpr="git pull --rebase"
 alias gs="git status"
+# https://stackoverflow.com/questions/7726949/remove-tracking-branches-no-longer-on-remote
+alias clearLocalBranch="git fetch -p && for branch in `git branch -vv | grep ': gone]' | awk '{print $1}'`; do git branch -D $branch; done"
+
 
 # 时间格式定制 https://stackoverflow.com/questions/7853332/how-to-change-git-log-date-formats
 # 同步分支 https://stackoverflow.com/questions/6373277/synchronizing-a-local-git-repository-with-a-remote-one
@@ -265,6 +268,15 @@ branchLife() { # 查看分支最后提交人和存活周期
         | sed  -e "s/^.*\sweeks\s.*$/\x1b[35m&\x1b[0m/"  -e "s/^.*\smonths\s.*$/\x1b[31m&\x1b[0m/"
     #    | sed  -e "s/^.* weeks .*$/${esc}[35m&${esc}[0m/"  -e "s/^.* months .*$/${esc}[31m&${esc}[0m/"
     # mac zsh上不行，为什么~~  需要查明 ${esc}  \x1b \011 的区别
+}
+
+seeCommitNum() {
+    git log --format='%aN' | \
+        sort -u | \
+        while read name; do \
+            echo -en "$name\t"; git log --author="$name" --pretty=tformat: --numstat --since="$1" | \
+            awk '{ add += $1; subs += $2; loc += $1 - $2 } END { printf "added lines: %s, removed lines: %s, total lines: %s\n", add, subs, loc }' -; \
+        done
 }
 
 gitLog() { # 高度格式化的日志阅读格式

@@ -60,7 +60,7 @@ Plugin 'severin-lemaignan/vim-minimap'
 " Tell Neosnippet about the other snippets
 let g:neosnippet#snippets_directory='~/.vim/bundle/oh-my-snippets/neo-snippets'
 " push当前文件到光子debug目录
-command! ADBpush !adb push % /sdcard/rapidview/rapid_demo/rapiddebug/%
+command! ADBpush !adb push % /sdcard/rapidview/common/rapid_debug/%
 command! ADBSpush silent !adb push % /sdcard/tencent/tassistant/rapiddebug/%
 autocmd BufWritePost *.xml :ADBpush
 autocmd BufWritePost *.lua :ADBpush
