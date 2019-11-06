@@ -1,0 +1,30 @@
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+set showmode " show current mode
+set scrolloff=3 " make cursor center relatively
+set history=100000
+
+
+let mapleader = ","
+
+" Reload
+nnoremap <leader>re :source ~/.ideavimrc<CR>
+
+" Build & Run
+nnoremap <leader>rr :action Run<CR>
+nnoremap <leader>cc :action CleanGradleProject<CR>
+nnoremap <leader>ss :action Android.SyncProject<CR>
+nnoremap <leader>rb :action Groovy.CheckResources.Rebuild<CR>
+
+
+" Window
+nnoremap <leader>sp :action SplitVertically<CR>
+nnoremap <leader>hsp :action SplitHorizontally<CR>
+nnoremap <leader>vsp :action SplitVertically<CR>
+
+nnoremap <leader>L :action ReformatCode<CR>
+
+" Tool
+nnoremap <leader>fp :action FindInPath<CR>
