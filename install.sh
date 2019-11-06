@@ -18,7 +18,7 @@ case "${unameOut}" in
     MINGW*)     machine=MinGw;;
     *)          machine="UNKNOWN:${unameOut}"
 esac
-echo -e "操作系统\t"${GREEN}${machine}${NORMAL}
+echo "Machine Type: "${GREEN}${machine}${NORMAL}
 # Step 2 备份用户配置
 
 
