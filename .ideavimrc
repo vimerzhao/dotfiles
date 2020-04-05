@@ -12,8 +12,11 @@ let mapleader = ","
 " Reload
 nnoremap <leader>re :source ~/.ideavimrc<CR>
 
+" File
+nnoremap <leader>cp :action CloseProject<CR>
+
 " Build & Run
-nnoremap <leader>rr :action Run<CR>
+nnoremap <leader>ra :action Run<CR> "run app
 nnoremap <leader>cc :action CleanGradleProject<CR>
 nnoremap <leader>ss :action Android.SyncProject<CR>
 nnoremap <leader>rb :action Groovy.CheckResources.Rebuild<CR>
@@ -26,5 +29,4 @@ nnoremap <leader>vsp :action SplitVertically<CR>
 
 nnoremap <leader>L :action ReformatCode<CR>
 
-" Tool
 nnoremap <leader>fp :action FindInPath<CR>

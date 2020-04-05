@@ -19,6 +19,19 @@ case "${unameOut}" in
     *)          machine="UNKNOWN:${unameOut}"
 esac
 echo "Machine Type: "${GREEN}${machine}${NORMAL}
-# Step 2 备份用户配置
+# Step 2 组装配置
+bashConfig=".bashrc.v"
+cat ./common.bashrc > ${bashConfig}
+#if [[ "${machine}"=="Linux" ]]; then       Why~~~必须要空格
+if [[ "${machine}" == "Linux" ]]; then
+    cat ./like.unix.bashrc >> ${bashConfig}
+    cat ./linux.bashrc >> ${bashConfig}
+elif [[ "${machine}" == "Mac" ]]; then
+    cat ./like.unix.bashrc >> ${bashConfig}
+    cat ./mac.bashrc >> ${bashConfig}
+elif [[ "${machine}" == "Windows" ]]; then
+    cat ./windows.bashrc >> ${bashConfig}
+fi
+
 
 

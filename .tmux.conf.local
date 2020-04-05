@@ -286,13 +286,4 @@ tmux_conf_copy_to_os_clipboard=true
 #set -g mode-keys vi
 
 # replace C-b by C-a instead of using both prefixes
-# C-a C-b和Vim冲突，所以用C-j
-set -gu prefix2
-unbind C-j
-unbind C-b
-set -g prefix C-j
-bind C-j send-prefix
-
-# move status line to top
-#set -g status-position top
-set-window-option -g mode-keys vi 
+source-file ~/.my-config/vimerzhao_tmux.conf
