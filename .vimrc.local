@@ -60,11 +60,23 @@ Plugin 'severin-lemaignan/vim-minimap'
 " Tell Neosnippet about the other snippets
 let g:neosnippet#snippets_directory='~/.vim/bundle/oh-my-snippets/neo-snippets'
 " push当前文件到光子debug目录
-command! ADBpush !adb push % /sdcard/rapidview/common/rapid_debug/%
-command! ADBSpush silent !adb push % /sdcard/tencent/tassistant/rapiddebug/%
-autocmd BufWritePost *.xml :ADBpush
-autocmd BufWritePost *.lua :ADBpush
+" TODO 能不能用一个变量来承载这个路径
 
+
+command! ADBpush !adb push % /sdcard/Android/data/com.tencent.android.qqdownloader/files/tassistant/photondebug/%
+command! ADBpushAsMainXml !adb push % /sdcard/Android/data/com.tencent.android.qqdownloader/files/tassistant/photondebug/main.xml
+command! ADBpushDebugConfig !adb push % /sdcard/Android/data/com.tencent.android.qqdownloader/files/tassistant/photondebug/debug_data.txt
+"autocmd BufWritePost *.xml :ADBpush
+"autocmd BufWritePost *.lua :ADBpush
+
+
+function! RapidHotReload()
+    !adb push % /sdcard/Android/data/com.tencent.android.qqdownloader/files/tassistant/photondebug/ &&adb shell input keyevent 4 && sleep 0.1 && adb shell am start -a android.intent.action.VIEW -d "tmast://appdemo?photonid=301535507683015"
+endfunction
+
+function! RapidHotReloadAsMain()
+    !adb push % /sdcard/Android/data/com.tencent.android.qqdownloader/files/tassistant/photondebug/main.xml &&adb shell input keyevent 4 && sleep 0.1 && adb shell am start -a android.intent.action.VIEW -d "tmast://appdemo?photonid=301535507683015"
+endfunction
 " 杀死应用宝进程
 command! ADBSkill silent !adb shell am force-stop com.tencent.android.qqdownloader
 command! ADBkill !adb shell am force-stop com.tencent.android.qqdownloader
@@ -120,4 +132,7 @@ set rtp+=~/.my-config/.vim
 if s:os == s:os_win
 elseif s:os == s:os_mac
     command! AsciidocPreview !asciidoctor % && open -a "Google Chrome" %<.html
+    command! Asciidoc2LiveHtml silent !asciidoctor % -o live.html
+    "autocmd BufWritePost *.adoc :Asciidoc2LiveHtml
 endif
+
